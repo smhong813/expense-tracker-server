@@ -44,6 +44,9 @@ router.patch("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const deleteResult = await Expense.deleteExpenseById(req.params.id);
+    if (deleteResult.deletedCount !== 1) {
+      throw new Error("Couldn't delete the expense");
+    }
     res.json(deleteResult);
   } catch (err) {
     next(err);

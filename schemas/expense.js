@@ -37,9 +37,6 @@ expenseSchema.statics.updateExpenseById = function (id, expense) {
 
 expenseSchema.statics.deleteExpenseById = async function (id) {
   const result = this.deleteOne({ _id: id });
-  if (result.deletedCount !== 1) {
-    throw new Error("Couldn't delete the expense");
-  }
   return result;
 };
 

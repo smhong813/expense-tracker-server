@@ -48,4 +48,18 @@ expenseSchema.statics.getExpenseById = function (id) {
   return this.findOne({ _id: id });
 };
 
+expenseSchema.post("save", function (error, res, next) {
+  if (error.name === "ValidationError") {
+    next(new Error("Please check if you have entered all fields."));
+  } else {
+    next(new Error("Please try it later."));
+  }
+});
+expenseSchema.post("findOneAndUpdate", function (error, res, next) {
+  next(new Error("Please try it later."));
+});
+expenseSchema.post("deleteOne", function (error, res, next) {
+  next(new Error("Please try it later."));
+});
+
 module.exports = mongoose.model("Expense", expenseSchema);

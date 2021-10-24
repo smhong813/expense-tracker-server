@@ -2,6 +2,20 @@ const express = require("express");
 const router = express.Router();
 const Expense = require("../schemas/expense");
 
+/**
+ * @swagger
+ * /expenses:
+ *   get:
+ *     summary: Retrieve a list of expenses
+ *     tags: [Expense]
+ *     responses:
+ *       200:
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Expense'
+ */
+
 router.get("/", async (req, res, next) => {
   try {
     const expenses = await Expense.getAllExpenses();
@@ -11,14 +25,25 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const expense = await Expense.getExpenseById(req.params.id);
-    res.json(expense);
-  } catch (err) {
-    next(err);
-  }
-});
+/**
+ * @swagger
+ * /expenses:
+ *   post:
+ *     summary: Add a new expense
+ *     tags: [Expense]
+ *     parameters:
+ *     - in: body
+ *       required: true
+ *       schema:
+ *         $ref: '#/definitions/Expense'
+ *
+ *
+ *     responses:
+ *       200:
+ *         description: An added expense object
+ *         schema:
+ *           $ref: '#/definitions/Expense'
+ */
 
 router.post("/", async (req, res, next) => {
   try {
@@ -29,6 +54,29 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /expenses/{id}:
+ *   patch:
+ *     summary: Edit a expense by ID
+ *     tags: [Expense]
+ *     parameters:
+ *     - in: path
+ *       required: true
+ *       name: "id"
+ *       description: "ID of expense to update"
+ *     - in: body
+ *       required: true
+ *       schema:
+ *         $ref: '#/definitions/Expense'
+ *
+ *
+ *     responses:
+ *       200:
+ *         description: An edited expense object
+ *         schema:
+ *           $ref: '#/definitions/Expense'
+ */
 router.patch("/:id", async (req, res, next) => {
   try {
     const updatedExpense = await Expense.updateExpenseById(
@@ -41,6 +89,29 @@ router.patch("/:id", async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /expenses/{id}:
+ *   delete:
+ *     summary: Delete an expense by ID
+ *     tags: [Expense]
+ *     parameters:
+ *     - in: path
+ *       required: true
+ *       name: "id"
+ *       description: "ID of expense to delete"
+ *
+ *
+ *     responses:
+ *       200:
+ *         description: The count of deleted expense
+ *         schema:
+ *           type: object
+ *           properties:
+ *             deletedCount:
+ *               type: integer
+ *
+ */
 router.delete("/:id", async (req, res, next) => {
   try {
     const deleteResult = await Expense.deleteExpenseById(req.params.id);
